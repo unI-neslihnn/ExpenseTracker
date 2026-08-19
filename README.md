@@ -5,9 +5,9 @@ Expense Tracker, kullanıcıların kişisel gelir ve giderlerini yönetmesini, h
 <h3>📱 Uygulama Görselleri</h3>
 
 <p align="center">
-  <img src="./assets/resim1.png" width="22%" alt="Ana Ekran" />
-  <img src="./assets/resim2.png" width="22%" alt="Analiz" />
-  <img src="./assets/resim3.png" width="22%" alt="Ayarlar" />
+  <img src="./assets/resim1.png" width="20%" alt="Ana Ekran" />
+  <img src="./assets/resim2.png" width="20%" alt="Analiz" />
+  <img src="./assets/resim3.png" width="20%" alt="Ayarlar" />
 </p>
 
 <h3>📌 Özellikler</h3>
