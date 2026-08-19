@@ -14,7 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { PieChart } from 'react-native-gifted-charts';
 
-import { Transaction, COLORS, FilterType } from './src/types';
+import { COLORS } from './src/types';
 import { initDB, addTransaction, getTransactions, deleteTransaction } from './src/db/database';
 import { fetchCurrencyRates } from './src/services/currencyService';
 import { exportBackup } from './src/services/backupService';
@@ -26,10 +26,10 @@ import { AddModal } from './src/components/AddModal';
 const CHART_COLORS = ['#1F2A44', '#C6A75E', '#8B5D33', '#4A6B6C', '#813405', '#526E48'];
 
 export default function App() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [rates, setRates] = useState<{ [key: string]: number }>({});
+  const [transactions, setTransactions] = useState([]);
+  const [rates, setRates] = useState({});
   const [search, setSearch] = useState('');
-  const [filterType, setFilterType] = useState<FilterType>('all');
+  const [filterType, setFilterType] = useState('all');
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
@@ -50,12 +50,12 @@ export default function App() {
     loadTransactions();
   }, [search, filterType]);
 
-  const handleAddTransaction = async (tx: Omit<Transaction, 'id'>) => {
+  const handleAddTransaction = async (tx) => {
     await addTransaction(tx);
     await loadTransactions();
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id) => {
     Alert.alert('Sil', 'Bu işlemi silmek istediğinize emin misiniz?', [
       { text: 'İptal', style: 'cancel' },
       {
@@ -79,7 +79,7 @@ export default function App() {
 
   const expenseChartData = transactions
     .filter((t) => t.type === 'expense')
-    .reduce((acc: any[], curr) => {
+    .reduce((acc, curr) => {
       const existing = acc.find((item) => item.text === curr.category);
       if (existing) {
         existing.value += curr.amount;
@@ -136,7 +136,7 @@ export default function App() {
         </View>
 
         <View style={styles.chipsRow}>
-          {(['all', 'income', 'expense'] as FilterType[]).map((type) => (
+          {['all', 'income', 'expense'].map((type) => (
             <TouchableOpacity
               key={type}
               style={[styles.filterChip, filterType === type && styles.filterChipActive]}
@@ -155,7 +155,7 @@ export default function App() {
         </View>
       </View>
 
-      {/* Gider Grafiği (Daha düzenli ve sade) */}
+      {/* Gider Grafiği */}
       {expenseChartData.length > 0 && filterType !== 'income' && (
         <View style={styles.chartCard}>
           <Text style={styles.chartTitle}>Kategori Bazlı Gider Dağılımı</Text>
@@ -219,7 +219,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: COLORS.bgLight,
-    // Android çentik ve durum çubuğu boşluğu
     paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 0) + 12 : 12,
   },
   header: {

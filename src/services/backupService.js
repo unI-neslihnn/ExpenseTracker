@@ -2,7 +2,6 @@ import { File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { Alert } from 'react-native';
 import { getAllDataForBackup, restoreData } from '../db/database';
-import { Transaction } from '../types';
 
 export const exportBackup = async () => {
   try {
@@ -35,9 +34,9 @@ export const exportBackup = async () => {
   }
 };
 
-export const restoreBackupFromJson = async (jsonString: string): Promise<boolean> => {
+export const restoreBackupFromJson = async (jsonString) => {
   try {
-    const parsedData: Transaction[] = JSON.parse(jsonString);
+    const parsedData = JSON.parse(jsonString);
     if (Array.isArray(parsedData)) {
       await restoreData(parsedData);
       return true;

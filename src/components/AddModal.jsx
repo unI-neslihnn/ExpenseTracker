@@ -9,18 +9,12 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-import { COLORS, CATEGORIES, Transaction } from '../types';
+import { COLORS, CATEGORIES } from '../types';
 
-interface Props {
-  visible: boolean;
-  onClose: () => void;
-  onSave: (tx: Omit<Transaction, 'id'>) => Promise<void>;
-}
-
-export const AddModal: React.FC<Props> = ({ visible, onClose, onSave }) => {
+export const AddModal = ({ visible, onClose, onSave }) => {
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
-  const [type, setType] = useState<'income' | 'expense'>('expense');
+  const [type, setType] = useState('expense');
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [currency, setCurrency] = useState('TRY');
 

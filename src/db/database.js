@@ -1,7 +1,6 @@
 import * as SQLite from 'expo-sqlite';
-import { Transaction } from '../types';
 
-let db: SQLite.SQLiteDatabase;
+let db;
 
 export const initDB = async () => {
   db = await SQLite.openDatabaseAsync('expenses.db');
@@ -19,7 +18,7 @@ export const initDB = async () => {
   `);
 };
 
-export const addTransaction = async (tx: Omit<Transaction, 'id'>) => {
+export const addTransaction = async (tx) => {
   const result = await db.runAsync(
     `INSERT INTO transactions (title, amount, type, category, currency, date) VALUES (?, ?, ?, ?, ?, ?);`,
     [tx.title, tx.amount, tx.type, tx.category, tx.currency, tx.date]
@@ -27,17 +26,13 @@ export const addTransaction = async (tx: Omit<Transaction, 'id'>) => {
   return result.lastInsertRowId;
 };
 
-export const deleteTransaction = async (id: number) => {
+export const deleteTransaction = async (id) => {
   await db.runAsync(`DELETE FROM transactions WHERE id = ?;`, [id]);
 };
 
-export const getTransactions = async (filters?: {
-  search?: string;
-  type?: string;
-  category?: string;
-}): Promise<Transaction[]> => {
+export const getTransactions = async (filters) => {
   let query = `SELECT * FROM transactions WHERE 1=1`;
-  const params: any[] = [];
+  const params = [];
 
   if (filters?.search && filters.search.trim() !== '') {
     query += ` AND title LIKE ?`;
@@ -53,14 +48,14 @@ export const getTransactions = async (filters?: {
   }
 
   query += ` ORDER BY date DESC, id DESC;`;
-  return await db.getAllAsync<Transaction>(query, params);
+  return await db.getAllAsync(query, params);
 };
 
-export const getAllDataForBackup = async (): Promise<Transaction[]> => {
-  return await db.getAllAsync<Transaction>(`SELECT * FROM transactions;`);
+export const getAllDataForBackup = async () => {
+  return await db.getAllAsync(`SELECT * FROM transactions;`);
 };
 
-export const restoreData = async (data: Transaction[]) => {
+export const restoreData = async (data) => {
   await db.execAsync(`DELETE FROM transactions;`);
   for (const item of data) {
     await db.runAsync(

@@ -1,14 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Transaction, COLORS } from '../types';
+import { COLORS } from '../types';
 
-interface Props {
-  item: Transaction;
-  onDelete: (id: number) => void;
-}
-
-export const TransactionItem: React.FC<Props> = ({ item, onDelete }) => {
+export const TransactionItem = ({ item, onDelete }) => {
   const isIncome = item.type === 'income';
 
   return (

@@ -1,15 +1,3 @@
-export interface Transaction {
-  id?: number;
-  title: string;
-  amount: number;
-  type: 'income' | 'expense';
-  category: string;
-  currency: string;
-  date: string;
-}
-
-export type FilterType = 'all' | 'income' | 'expense';
-
 export const COLORS = {
   navy: '#1F2A44',
   warmBeige: '#E8DCC8',

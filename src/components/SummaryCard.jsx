@@ -2,14 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { COLORS } from '../types';
 
-interface Props {
-  income: number;
-  expense: number;
-  usdRate?: number;
-  eurRate?: number;
-}
-
-export const SummaryCard: React.FC<Props> = ({ income, expense, usdRate, eurRate }) => {
+export const SummaryCard = ({ income, expense, usdRate, eurRate }) => {
   const balance = income - expense;
 
   return (
