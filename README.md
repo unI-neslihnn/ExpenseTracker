@@ -2,6 +2,14 @@
 
 Expense Tracker, kullanıcıların kişisel gelir ve giderlerini yönetmesini, harcamalarını grafiklerle analiz etmesini, canlı döviz kurlarını takip etmesini ve verilerini internet olmadan cihazda saklamasını sağlayan React Native ve Expo tabanlı bir mobil bütçe takip uygulamasıdır.
 
+<h3>📱 Uygulama Görselleri</h3>
+
+<p align="center">
+  <img src="./assets/resim1.png" width="22%" alt="Ana Ekran" />
+  <img src="./assets/resim2.png" width="22%" alt="Analiz" />
+  <img src="./assets/resim3.png" width="22%" alt="Ayarlar" />
+</p>
+
 <h3>📌 Özellikler</h3>
 
 Gelir ve Gider Takibi: Kategori, tutar ve para birimi seçerek hızlı işlem kaydetme.
