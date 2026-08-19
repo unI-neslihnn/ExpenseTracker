@@ -30,7 +30,7 @@ export const SummaryCard = ({ income, expense, usdRate, eurRate }) => {
       </View>
 
       <View style={styles.ratesContainer}>
-        <Text style={styles.rateTitle}>Canlı Kurlar (TL Karşılığı):</Text>
+        <Text style={styles.rateTitle}>Canlı Kurlar</Text>
         <Text style={styles.rateText}>
           USD: <Text style={styles.rateHighlight}>{usdRate ? (1 / usdRate).toFixed(2) : '-'} ₺</Text>
           {'   •   '}

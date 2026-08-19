@@ -27,7 +27,7 @@ const CHART_COLORS = ['#1F2A44', '#C6A75E', '#8B5D33', '#4A6B6C', '#813405', '#5
 
 export default function App() {
   const [transactions, setTransactions] = useState([]);
-  const [rates, setRates] = useState({});
+  const [rates, setRates] = useState({ TRY: 1, USD: 0.03, EUR: 0.028 });
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,7 +37,9 @@ export default function App() {
       await initDB();
       await loadTransactions();
       const fetchedRates = await fetchCurrencyRates();
-      setRates(fetchedRates);
+      if (fetchedRates) {
+        setRates(fetchedRates);
+      }
     })();
   }, []);
 
@@ -69,23 +71,35 @@ export default function App() {
     ]);
   };
 
+  // Tutarları TL'ye çeviren yardımcı fonksiyon
+  const convertToTRY = (amount, currency) => {
+    if (!currency || currency === 'TRY') return amount;
+    if (currency === 'USD' && rates.USD) return amount / rates.USD;
+    if (currency === 'EUR' && rates.EUR) return amount / rates.EUR;
+    return amount;
+  };
+
+  // Toplam Gelir (TL cinsinden)
   const totalIncome = transactions
     .filter((t) => t.type === 'income')
-    .reduce((acc, curr) => acc + curr.amount, 0);
+    .reduce((acc, curr) => acc + convertToTRY(curr.amount, curr.currency), 0);
 
+  // Toplam Gider (TL cinsinden)
   const totalExpense = transactions
     .filter((t) => t.type === 'expense')
-    .reduce((acc, curr) => acc + curr.amount, 0);
+    .reduce((acc, curr) => acc + convertToTRY(curr.amount, curr.currency), 0);
 
+  // Gider Grafiği Verisi (TL cinsinden hesaplanır)
   const expenseChartData = transactions
     .filter((t) => t.type === 'expense')
     .reduce((acc, curr) => {
+      const tryAmount = convertToTRY(curr.amount, curr.currency);
       const existing = acc.find((item) => item.text === curr.category);
       if (existing) {
-        existing.value += curr.amount;
+        existing.value += tryAmount;
       } else {
         acc.push({
-          value: curr.amount,
+          value: tryAmount,
           text: curr.category,
           color: CHART_COLORS[acc.length % CHART_COLORS.length],
         });
@@ -158,7 +172,7 @@ export default function App() {
       {/* Gider Grafiği */}
       {expenseChartData.length > 0 && filterType !== 'income' && (
         <View style={styles.chartCard}>
-          <Text style={styles.chartTitle}>Kategori Bazlı Gider Dağılımı</Text>
+          <Text style={styles.chartTitle}>Kategori Bazlı Gider Dağılımı (₺)</Text>
           <View style={styles.chartContent}>
             <PieChart
               data={expenseChartData}
@@ -172,7 +186,7 @@ export default function App() {
                 <View key={index} style={styles.legendRow}>
                   <View style={[styles.legendDot, { backgroundColor: item.color }]} />
                   <Text style={styles.legendText} numberOfLines={1}>
-                    {item.text}: <Text style={{ fontWeight: '700' }}>{item.value.toLocaleString('tr-TR')} ₺</Text>
+                    {item.text}: <Text style={{ fontWeight: '700' }}>{Math.round(item.value).toLocaleString('tr-TR')} ₺</Text>
                   </Text>
                 </View>
               ))}
@@ -181,7 +195,7 @@ export default function App() {
         </View>
       )}
 
-      {/* Liste */}
+      {/* Liste (Orijinal döviz simgesi ve tutarı ile listelenir) */}
       <FlatList
         data={transactions}
         keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
